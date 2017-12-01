@@ -1,8 +1,7 @@
-var socket = new WebSocket('ws://' + window.location.host + window.location.pathname)
+const socket = new WebSocket('ws://' + window.location.host + window.location.pathname)
 
 socket.onmessage = function (message) {
-  var msg = JSON.parse(message.data)
-  console.log(msg)
+  let msg = JSON.parse(message.data)
   switch (msg.type) {
     case 'assigned_id' :
       socket.id = msg.id
@@ -31,7 +30,7 @@ socket.onmessage = function (message) {
       break
     case 'received_candidate' :
       console.log('received candidate', msg.data)
-      var candidate = new RTCIceCandidate({
+      let candidate = new RTCIceCandidate({
         sdpMLineIndex: msg.data.label,
         candidate: msg.data.candidate
       })
@@ -90,8 +89,6 @@ function showVideo () {
 }
 
 function start () {
-  // this initializes the peer connection
-  console.log('start')
   pc.createOffer().then(function (description) {
     pc.setLocalDescription(description).then(function () {
       socket.send(JSON.stringify({
